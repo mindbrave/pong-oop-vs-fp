@@ -30,8 +30,3 @@ defineSupportCode(function({Given, When, Then}) {
     })
     
 })
-
-
-const thatHasViewSize = (width: number, height: number, pong: Pong): Pong => ({
-    ...pong, width, height
-})
