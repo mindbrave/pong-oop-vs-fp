@@ -1,0 +1,38 @@
+{
+  "name": "Pong-OOP-vs-FP",
+  "description": "Pong game implemented twice (with OOP and FP)",
+  "author": "Rafał Łużyński <rafalluzynski0@gmail.com>",
+  "license": "(CC-BY-NC-SA-4.0)",
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mindbrave/pong-oop-vs-fp.git"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.0",
+    "@types/cucumber": "^3.2.1",
+    "chai": "^4.1.2",
+    "cucumber": "^3.2.0",
+    "jest": "^22.0.4",
+    "systemjs": "^0.20.19",
+    "ts-node": "^4.1.0"
+  },
+  "scripts": {
+    "test-fp": "./node_modules/.bin/cucumber.js --compiler ts:ts-node/register ./src/fppong/;",
+    "test-oop": "./node_modules/.bin/cucumber.js --compiler ts:ts-node/register ./src/ooppong/;",
+    "build": "./node_modules/.bin/tsc --module system"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "./node_modules/"
+    ],
+    "testRegex": "(.*\\.test)\\.(ts)$",
+    "moduleFileExtensions": [
+      "ts"
+    ]
+  },
+  "dependencies": {
+    "pipe-operator": "0.0.7",
+    "typescript": "^2.6.2"
+  }
+}
