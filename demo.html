@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pong demo</title>
+    
+</head>
+<body>
+    <canvas id="canvas" width="2000" height="2000"></canvas>
+    <script src="node_modules/systemjs/dist/system.js"></script>
+    <script src="build/pong.js"></script>
+    <script>
+        SystemJS.config({
+            "paths": {
+                "rxjs": "./node_modules/rxjs/bundles/Rx.min.js"
+            }
+        });
+        SystemJS.import('fppong/main').then(function(fppong) {
+            // fppong.run();
+        });
+        SystemJS.import('ooppong/main').then(function(ooppong) {
+            const game = new ooppong.Game();
+            game.run();
+        });
+    </script>
+</body>
+</html>

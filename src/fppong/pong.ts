@@ -14,15 +14,30 @@ export type Pong = {
         height: number
     }
     
-}
+};
+
 type Position = {
     x: number,
     y: number
-}
+};
 
-type Ball = Position
-type Paddle = Position
+type Ball = {
+    position: Position,
+    radius: number
+};
 
+export type Paddle = {
+    position: Position,
+    width: number,
+    height: number
+};
+
+
+const PADDLE_SIZE = {
+    WIDTH: 10,
+    HEIGHT: 50
+};
+const BALL_RADIUS = 5;
 
 export const createPong = (width: number, height: number): Pong => ({
     score: {
@@ -31,20 +46,31 @@ export const createPong = (width: number, height: number): Pong => ({
     },
     paddles: {
         player: {
-            x: 20,
-            y: height/2
+            position: {
+                x: 20,
+                y: height/2
+            },
+            width: PADDLE_SIZE.WIDTH,
+            height: PADDLE_SIZE.HEIGHT
         },
         cpu: {
-            x: width - 20,
-            y: height/2
+            position: {
+                x: width - 20,
+                y: height/2
+            },
+            width: PADDLE_SIZE.WIDTH,
+            height: PADDLE_SIZE.HEIGHT
         }
     },
     ball: {
-        x: width/2,
-        y: height/2
+        position: {
+            x: width/2,
+            y: height/2,
+        },
+        radius: BALL_RADIUS,
     },
     view: {
         width,
         height
     }
-})
+});
