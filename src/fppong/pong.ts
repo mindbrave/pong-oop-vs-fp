@@ -1,4 +1,8 @@
 
+import {Paddle, orderPaddleToMoveUp, orderPaddleToMoveDown, orderPaddleToStop, movePaddle} from './paddle';
+import {Vec2} from './math';
+
+
 export type Pong = {
     score: {
         player: number,
@@ -16,20 +20,52 @@ export type Pong = {
     
 };
 
-type Position = {
-    x: number,
-    y: number
+
+export const orderPlayerPaddleToMoveUp = (game: Pong): Pong => {
+    return {
+        ...game,
+        paddles: {
+            ...game.paddles,
+            player: orderPaddleToMoveUp(game.paddles.player)
+        }
+    };    
 };
+
+
+export const orderPlayerPaddleToMoveDown = (game: Pong): Pong => {
+    return {
+        ...game,
+        paddles: {
+            ...game.paddles,
+            player: orderPaddleToMoveDown(game.paddles.player)
+        }
+    };    
+};
+
+
+export const orderPlayerPaddleToStop = (game: Pong): Pong => {
+    return {
+        ...game,
+        paddles: {
+            ...game.paddles,
+            player: orderPaddleToStop(game.paddles.player)
+        }
+    }
+}
+
+
+export const updatePong = (game: Pong, duration: number): Pong => ({
+    ...game,
+    paddles: {
+        ...game.paddles,
+        player: movePaddle(game.paddles.player, duration)
+    }
+});
+
 
 type Ball = {
-    position: Position,
+    position: Vec2,
     radius: number
-};
-
-export type Paddle = {
-    position: Position,
-    width: number,
-    height: number
 };
 
 
@@ -38,6 +74,7 @@ const PADDLE_SIZE = {
     HEIGHT: 50
 };
 const BALL_RADIUS = 5;
+
 
 export const createPong = (width: number, height: number): Pong => ({
     score: {
@@ -50,6 +87,11 @@ export const createPong = (width: number, height: number): Pong => ({
                 x: 20,
                 y: height/2
             },
+            velocity: {
+                x: 0.0,
+                y: 0.0
+            },
+            speed: 5.0,
             width: PADDLE_SIZE.WIDTH,
             height: PADDLE_SIZE.HEIGHT
         },
@@ -58,6 +100,11 @@ export const createPong = (width: number, height: number): Pong => ({
                 x: width - 20,
                 y: height/2
             },
+            velocity: {
+                x: 0.0,
+                y: 0.0
+            },
+            speed: 5.0,
             width: PADDLE_SIZE.WIDTH,
             height: PADDLE_SIZE.HEIGHT
         }

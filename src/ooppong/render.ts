@@ -1,5 +1,6 @@
 
-import {Pong, Paddle} from './pong';
+import {Pong, GameView} from './pong';
+import {Paddle} from './paddle';
 
 
 export const renderPong = (game: Pong, canvas: HTMLCanvasElement) => {
@@ -30,13 +31,19 @@ export const renderPong = (game: Pong, canvas: HTMLCanvasElement) => {
     context.fillText(game.score.cpu.toString(), game.view.width/2.0 + 10, 80);
 };
 
+
 const drawPaddle = (paddle: Paddle, context: CanvasRenderingContext2D) => {
     context.fillStyle = 'white';
     context.rect(
-        paddle.position.x - paddle.width/2.0,
-        paddle.position.y - paddle.height/2.0,
-        paddle.width,
-        paddle.height
+        paddle.position.x - paddle.size.width/2.0,
+        fromRealToCanvasY(paddle.position.y, context) - paddle.size.height/2.0,
+        paddle.size.width,
+        paddle.size.height
     );
     context.fill();
+};
+
+
+const fromRealToCanvasY = (y: number, context: CanvasRenderingContext2D): number => {
+    return context.canvas.height - y;
 };

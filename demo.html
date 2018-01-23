@@ -6,7 +6,7 @@
     
 </head>
 <body>
-    <canvas id="canvas" width="2000" height="2000"></canvas>
+    <canvas id="canvas" width="800" height="600"></canvas>
     <script src="node_modules/systemjs/dist/system.js"></script>
     <script src="build/pong.js"></script>
     <script>
@@ -15,11 +15,11 @@
                 "rxjs": "./node_modules/rxjs/bundles/Rx.min.js"
             }
         });
-        SystemJS.import('fppong/main').then(function(fppong) {
-            // fppong.run();
+        SystemJS.import('fppong/main').then(function(pong) {
+            // pong.run();
         });
-        SystemJS.import('ooppong/main').then(function(ooppong) {
-            const game = new ooppong.Game();
+        SystemJS.import('ooppong/main').then(function(pong) {
+            const game = new pong.Game();
             game.run();
         });
     </script>

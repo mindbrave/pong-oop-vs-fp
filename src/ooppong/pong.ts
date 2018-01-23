@@ -1,9 +1,15 @@
 
-const PADDLE_SIZE = {
-    WIDTH: 10,
-    HEIGHT: 50
-};
+import {Paddle} from './paddle';
+import {Ball} from './ball';
+import {Vec2} from './math';
+
+
+const PADDLE_SPEED = 60;
 const BALL_RADIUS = 5;
+const PADDLE_SIZE = {
+    width: 10,
+    height: 50,
+};
 
 
 export class Pong {
@@ -16,10 +22,7 @@ export class Pong {
         cpu: Paddle
     };
     public ball: Ball;
-    public view: {
-        width: number,
-        height: number
-    };
+    public view: GameView;
     
     constructor(width: number, height: number) {
         this.score = {
@@ -27,48 +30,35 @@ export class Pong {
             cpu: 0
         };
         this.paddles = {
-            player: new Paddle(new Position(20, height/2)),
-            cpu: new Paddle(new Position(width - 20, height/2))
+            player: new Paddle(new Vec2(20, height/2), new Vec2(0, 0), PADDLE_SPEED, PADDLE_SIZE),
+            cpu: new Paddle(new Vec2(width - 20, height/2), new Vec2(0, 0), PADDLE_SPEED, PADDLE_SIZE)
         };
-        this.ball = new Ball(new Position(width/2, height/2));
+        this.ball = new Ball(new Vec2(width/2, height/2), BALL_RADIUS);
         this.view = {
             width,
             height
         };
     }
-}
-
-
-class Position {
-    public x: number;
-    public y: number;
     
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
+    update(duration: number) {
+        this.paddles.player.move(duration, this.view);
+    }
+    
+    orderPlayerPaddleToMoveUp() {
+        this.paddles.player.orderToMoveUp();
+    }
+    
+    orderPlayerPaddleToMoveDown() {
+        this.paddles.player.orderToMoveDown();
+    }
+    
+    orderPlayerPaddleToStop() {
+        this.paddles.player.orderToStop();
     }
 }
 
 
-export class Paddle {
-    public position: Position;
-    public width: number;
-    public height: number;
-    
-    constructor(position: Position) {
-        this.position = position;
-        this.width = PADDLE_SIZE.WIDTH;
-        this.height = PADDLE_SIZE.HEIGHT;
-    }
-}
-
-
-class Ball {
-    public position: Position;
-    public radius: number;
-    
-    constructor(position: Position) {
-        this.position = position;
-        this.radius = BALL_RADIUS;
-    }
-}
+export type GameView = {
+    width: number,
+    height: number
+};
