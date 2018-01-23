@@ -12,8 +12,10 @@ export const somePaddle = (): Paddle => ({
         y: 0
     },
     speed: 5,
-    width: 2,
-    height: 10
+    size: {
+        width: 2,
+        height: 10
+    }
 });
 
 
@@ -31,4 +33,18 @@ export const hasVelocity = (paddle: Paddle, vx: number, vy: number): Paddle => (
     ...paddle, velocity: {x: vx, y: vy}
 });
 
+
 export const isMovingUp = (paddle: Paddle): Paddle => hasVelocity(paddle, paddle.velocity.x, 10.0);
+
+
+export const paddleHasSize = (paddle: Paddle, width: number, height: number): Paddle => ({
+    ...paddle, size: {width, height}
+});
+
+
+export const paddleIsJustOverBottomEdge = (paddle: Paddle): Paddle =>
+    isAtPosition(paddle, paddle.position.x, paddle.size.height/2.0 + 3);
+
+
+export const paddleIsJustBeneathTopEdge = (paddle: Paddle, viewHeight: number): Paddle =>
+    isAtPosition(paddle, paddle.position.x, viewHeight - paddle.size.height/2.0 - 3);

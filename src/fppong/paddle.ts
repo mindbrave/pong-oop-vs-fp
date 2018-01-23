@@ -1,13 +1,16 @@
 
 import {Vec2, addVectors, scaleVector} from './math';
+import {GameView} from './pong';
 
 
 export type Paddle = {
     position: Vec2,
     velocity: Vec2,
     speed: number,
-    width: number,
-    height: number
+    size: {
+        width: number,
+        height: number
+    }
 };
 
 
@@ -35,7 +38,28 @@ export const orderPaddleToStop = (paddle: Paddle): Paddle => ({
 });
 
 
-export const movePaddle = (paddle: Paddle, duration: number): Paddle => ({
-    ...paddle,
-    position: addVectors(paddle.position, scaleVector(paddle.velocity, duration))
-});
+export const movePaddle = (paddle: Paddle, gameView: GameView, duration: number): Paddle => {
+    const nextPosition = addVectors(paddle.position, scaleVector(paddle.velocity, duration));
+    if (nextPosition.y + paddle.size.height/2.0 > gameView.height) {
+        return {
+            ...paddle,
+            position: {
+                x: nextPosition.x,
+                y: gameView.height - paddle.size.height/2.0
+            }
+        };
+    }
+    if (nextPosition.y - paddle.size.height/2.0 < 0) {
+        return {
+            ...paddle,
+            position: {
+                x: nextPosition.x,
+                y: paddle.size.height/2.0
+            }
+        };
+    }
+    return {
+        ...paddle,
+        position: nextPosition
+    };
+};

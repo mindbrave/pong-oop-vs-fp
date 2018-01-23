@@ -3,14 +3,14 @@ import {expect} from 'chai';
 import {take} from 'pipe-operator';
 
 import {orderPaddleToMoveUp, orderPaddleToMoveDown, orderPaddleToStop, movePaddle} from '../paddle';
-import {somePaddle, hasSpeed, isAtPosition, hasVelocity, isMovingUp} from './paddleFixture';
+import * as PaddleFixture from './paddleFixture';
 
 
 describe('Paddle movement', () => {
     
     test('paddle can be ordered to move up', () => {
         // given
-        const givenPaddle = hasSpeed(somePaddle(), 10.0); 
+        const givenPaddle = PaddleFixture.hasSpeed(PaddleFixture.somePaddle(), 10.0);
 
         //when
         const paddle = orderPaddleToMoveUp(givenPaddle);
@@ -21,7 +21,7 @@ describe('Paddle movement', () => {
     
     test('paddle can be ordered to move up', () => {
         // given
-        const givenPaddle = hasSpeed(somePaddle(), 10.0); 
+        const givenPaddle = PaddleFixture.hasSpeed(PaddleFixture.somePaddle(), 10.0);
 
         //when
         const paddle = orderPaddleToMoveDown(givenPaddle);
@@ -32,7 +32,7 @@ describe('Paddle movement', () => {
     
     test('paddle can be ordered to stop', () => {
         // given
-        const givenPaddle = isMovingUp(somePaddle()); 
+        const givenPaddle = PaddleFixture.isMovingUp(PaddleFixture.somePaddle());
 
         //when
         const paddle = orderPaddleToStop(givenPaddle);
@@ -45,17 +45,95 @@ describe('Paddle movement', () => {
     test('paddle can move', () => {
         // given
         const duration = 2.0;
-        const givenPaddle = take(somePaddle())
-            .pipe(isAtPosition, 50.0, 50.0)
-            .pipe(hasVelocity, 0.0, 10.0)
+        const gameView = {width: 100, height: 100};
+        const givenPaddle = take(PaddleFixture.somePaddle())
+            .pipe(PaddleFixture.isAtPosition, 50.0, 50.0)
+            .pipe(PaddleFixture.paddleHasSize, 2.0, 10.0)
+            .pipe(PaddleFixture.hasVelocity, 0.0, 10.0)
             .result();
         
         //when
-        const paddle = movePaddle(givenPaddle, duration);
+        const paddle = movePaddle(givenPaddle, gameView, duration);
 
         // then
         expect(paddle.position.x).to.equal(50.0, 'expect paddle position x to be');
         expect(paddle.position.y).to.equal(70.0, 'expect paddle position y to be');
+    });
+
+    test('paddle stops at the top edge', () => {
+        // given
+        const duration = 2.0;
+        const gameView = {width: 100, height: 100};
+        const givenPaddle = take(PaddleFixture.somePaddle())
+            .pipe(PaddleFixture.isAtPosition, 50.0, 78.0)
+            .pipe(PaddleFixture.paddleHasSize, 2.0, 10.0)
+            .pipe(PaddleFixture.hasVelocity, 0.0, 10.0)
+            .result();
+
+        //when
+        const paddle = movePaddle(givenPaddle, gameView, duration);
+
+        // then
+        expect(paddle.position.x).to.equal(50.0, 'expect paddle position x to be');
+        expect(paddle.position.y)
+            .to.equal(gameView.height - givenPaddle.size.height/2.0, 'expect paddle position y to be');
+    });
+
+    test('paddle stops at the top edge with high speed', () => {
+        // given
+        const duration = 2.0;
+        const gameView = {width: 100, height: 100};
+        const givenPaddle = take(PaddleFixture.somePaddle())
+            .pipe(PaddleFixture.isAtPosition, 50.0, 78.0)
+            .pipe(PaddleFixture.paddleHasSize, 2.0, 10.0)
+            .pipe(PaddleFixture.hasVelocity, 0.0, 50.0)
+            .result();
+
+        //when
+        const paddle = movePaddle(givenPaddle, gameView, duration);
+
+        // then
+        expect(paddle.position.x).to.equal(50.0, 'expect paddle position x to be');
+        expect(paddle.position.y)
+            .to.equal(gameView.height - givenPaddle.size.height/2.0, 'expect paddle position y to be');
+    });
+
+    test('paddle stops at the bottom edge', () => {
+        // given
+        const duration = 2.0;
+        const gameView = {width: 100, height: 100};
+        const givenPaddle = take(PaddleFixture.somePaddle())
+            .pipe(PaddleFixture.isAtPosition, 50.0, 23.0)
+            .pipe(PaddleFixture.paddleHasSize, 2.0, 10.0)
+            .pipe(PaddleFixture.hasVelocity, 0.0, -10.0)
+            .result();
+
+        //when
+        const paddle = movePaddle(givenPaddle, gameView, duration);
+
+        // then
+        expect(paddle.position.x).to.equal(50.0, 'expect paddle position x to be');
+        expect(paddle.position.y)
+            .to.equal(givenPaddle.size.height/2.0, 'expect paddle position y to be');
+    });
+
+    test('paddle stops at the bottom edge with high speed', () => {
+        // given
+        const duration = 2.0;
+        const gameView = {width: 100, height: 100};
+        const givenPaddle = take(PaddleFixture.somePaddle())
+            .pipe(PaddleFixture.isAtPosition, 50.0, 23.0)
+            .pipe(PaddleFixture.paddleHasSize, 2.0, 10.0)
+            .pipe(PaddleFixture.hasVelocity, 0.0, -50.0)
+            .result();
+
+        //when
+        const paddle = movePaddle(givenPaddle, gameView, duration);
+
+        // then
+        expect(paddle.position.x).to.equal(50.0, 'expect paddle position x to be');
+        expect(paddle.position.y)
+            .to.equal(givenPaddle.size.height/2.0, 'expect paddle position y to be');
     });
     
 });

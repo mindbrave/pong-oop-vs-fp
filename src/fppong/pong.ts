@@ -13,11 +13,13 @@ export type Pong = {
         cpu: Paddle
     },
     ball: Ball,
-    view: {
-        width: number,
-        height: number
-    }
-    
+    view: GameView
+};
+
+
+export type GameView = {
+    width: number,
+    height: number
 };
 
 
@@ -58,7 +60,7 @@ export const updatePong = (game: Pong, duration: number): Pong => ({
     ...game,
     paddles: {
         ...game.paddles,
-        player: movePaddle(game.paddles.player, duration)
+        player: movePaddle(game.paddles.player, game.view, duration)
     }
 });
 
@@ -92,8 +94,10 @@ export const createPong = (width: number, height: number): Pong => ({
                 y: 0.0
             },
             speed: 5.0,
-            width: PADDLE_SIZE.WIDTH,
-            height: PADDLE_SIZE.HEIGHT
+            size: {
+                width: PADDLE_SIZE.WIDTH,
+                height: PADDLE_SIZE.HEIGHT
+            }
         },
         cpu: {
             position: {
@@ -105,8 +109,10 @@ export const createPong = (width: number, height: number): Pong => ({
                 y: 0.0
             },
             speed: 5.0,
-            width: PADDLE_SIZE.WIDTH,
-            height: PADDLE_SIZE.HEIGHT
+            size: {
+                width: PADDLE_SIZE.WIDTH,
+                height: PADDLE_SIZE.HEIGHT
+            }
         }
     },
     ball: {

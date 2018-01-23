@@ -4,7 +4,14 @@ import {expect} from 'chai';
 
 import {createPong, orderPlayerPaddleToMoveUp, orderPlayerPaddleToMoveDown, orderPlayerPaddleToStop} from '../../pong';
 import {withViewHeight, withPlayerPaddle, simulateGameForDuration} from '../gameFixture';
-import {isAtPosition, hasSpeed, isMovingUp} from '../paddleFixture';
+import {
+    isAtPosition,
+    hasSpeed,
+    isMovingUp,
+    paddleHasSize,
+    paddleIsJustOverBottomEdge,
+    paddleIsJustBeneathTopEdge
+} from '../paddleFixture';
 
 
 setWorldConstructor(function() {
@@ -32,6 +39,27 @@ defineSupportCode(function({Given, When, Then}) {
     
     Given(/^player paddle is moving up$/, function() {
         this.game = withPlayerPaddle(this.game, isMovingUp(this.game.paddles.player));
+    });
+
+    Given(/^player paddle has size width (.*), height (.*)$/, function(width: string, height: string) {
+        this.game = withPlayerPaddle(
+            this.game,
+            paddleHasSize(this.game.paddles.player, parseFloat(width), parseFloat(height))
+        );
+    });
+
+    Given(/^player paddle is just over the bottom edge$/, function() {
+        this.game = withPlayerPaddle(
+            this.game,
+            paddleIsJustOverBottomEdge(this.game.paddles.player)
+        );
+    });
+
+    Given(/^player paddle is just beneath the top edge$/, function() {
+        this.game = withPlayerPaddle(
+            this.game,
+            paddleIsJustBeneathTopEdge(this.game.paddles.player, this.game.view.height)
+        );
     });
     
     When(/^player moves paddle up for (.*) second$/, function(duration: string) {
@@ -74,6 +102,20 @@ defineSupportCode(function({Given, When, Then}) {
     Then(/^player paddle stopped moving$/, function() {
         expect(this.game.paddles.player.velocity.x).to.equal(0.0, 'expect player paddle velocity x to be');
         expect(this.game.paddles.player.velocity.y).to.equal(0.0, 'expect player paddle velocity y to be');
+    });
+
+    Then(/^player paddle is still at the top edge$/, function() {
+        expect(this.game.paddles.player.position.y).to.equal(
+            this.game.view.height - this.game.paddles.player.size.height/2.0,
+            'expect player paddle position y to be'
+        );
+    });
+
+    Then(/^player paddle is still at the bottom edge$/, function() {
+        expect(this.game.paddles.player.position.y).to.equal(
+            this.game.paddles.player.size.height/2.0,
+            'expect player paddle position y to be'
+        );
     });
 });
 
