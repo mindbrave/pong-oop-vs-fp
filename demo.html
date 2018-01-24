@@ -12,15 +12,16 @@
     <script>
         SystemJS.config({
             "paths": {
-                "rxjs": "./node_modules/rxjs/bundles/Rx.min.js"
+                "rxjs": "./node_modules/rxjs/bundles/Rx.min.js",
+                "ramda": "./node_modules/ramda/dist/ramda.min.js"
             }
         });
         SystemJS.import('fppong/main').then(function(pong) {
-            // pong.run();
+            pong.run();
         });
         SystemJS.import('ooppong/main').then(function(pong) {
             const game = new pong.Game();
-            game.run();
+            //game.run();
         });
     </script>
 </body>

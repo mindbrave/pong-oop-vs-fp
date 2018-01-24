@@ -75,8 +75,8 @@ const PADDLE_SIZE = {
     WIDTH: 10,
     HEIGHT: 50
 };
-const BALL_RADIUS = 5;
-
+const BALL_RADIUS = 5.0;
+const PADDLE_SPEED = 60.0;
 
 export const createPong = (width: number, height: number): Pong => ({
     score: {
@@ -93,7 +93,7 @@ export const createPong = (width: number, height: number): Pong => ({
                 x: 0.0,
                 y: 0.0
             },
-            speed: 5.0,
+            speed: PADDLE_SPEED,
             size: {
                 width: PADDLE_SIZE.WIDTH,
                 height: PADDLE_SIZE.HEIGHT
@@ -108,7 +108,7 @@ export const createPong = (width: number, height: number): Pong => ({
                 x: 0.0,
                 y: 0.0
             },
-            speed: 5.0,
+            speed: PADDLE_SPEED,
             size: {
                 width: PADDLE_SIZE.WIDTH,
                 height: PADDLE_SIZE.HEIGHT
