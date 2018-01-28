@@ -16,3 +16,9 @@ export const scaleVector = (v1: Vec2, factor: number): Vec2 => ({
     x: v1.x * factor,
     y: v1.y * factor
 });
+
+
+export const vectorLength = (v: Vec2): number => Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2));
+
+
+export const normalizeVector = (v: Vec2): Vec2 => ({x: v.x/vectorLength(v), y: v.y/vectorLength(v)});

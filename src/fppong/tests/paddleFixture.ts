@@ -1,5 +1,6 @@
 
 import {Paddle} from '../paddle';
+import {scaleVector, normalizeVector} from '../math'
 
 
 export const somePaddle = (): Paddle => ({
@@ -25,7 +26,7 @@ export const isAtPosition = (paddle: Paddle, x: number, y: number): Paddle => ({
 
 
 export const hasSpeed = (paddle: Paddle, speed: number): Paddle => ({
-    ...paddle, speed
+    ...paddle, speed, velocity: scaleVector(normalizeVector(paddle.velocity), speed)
 });
 
 
