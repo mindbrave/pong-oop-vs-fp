@@ -1,7 +1,10 @@
 
 import {expect} from 'chai';
 
-import {Vec2, addVectors, scaleVector, normalizeVector, vectorLength} from '../math';
+import {
+    addVectors, scaleVector, normalizeVector, vectorLength, radiansToUnitVector,
+    degToRad
+} from '../math';
 
 
 describe('Vector operations', () => {
@@ -53,5 +56,153 @@ describe('Vector operations', () => {
         
         // then
         expect(length).to.equal(5.0, 'expect vector length to be');
+    });
+    
+    test('can convert 0 angle to unit vector', () => {
+        // given
+        const angleRadians = 0.0;
+        
+        // when
+        const v = radiansToUnitVector(angleRadians);
+        
+        // then
+        expect(v.x).to.equal(1.0, 'expect vector x to be');
+        expect(v.y).to.equal(0.0, 'expect vector y to be');
+    });
+    
+    test('can convert 90 angle to unit vector', () => {
+        // given
+        const angleRadians = Math.PI/2.0;
+        
+        // when
+        const v = radiansToUnitVector(angleRadians);
+
+        // then
+        expect(v.x).closeTo(0.0, 0.00001, 'expect vector x to be close to');
+        expect(v.y).closeTo(1.0, 0.00001, 'expect vector y to be close to');
+    });
+});
+
+
+describe('Angle operations', () => {
+    test('can convert 0 degrees to radians', () => {
+        // given
+        const degrees = 0;
+        
+        // when
+        const radians = degToRad(degrees);
+        
+        // then
+        expect(radians).to.equal(0.0, 'expect radians to be');
+    });
+    
+    test('can convert 90 degrees to radians', () => {
+        // given
+        const degrees = 90;
+        
+        // when
+        const radians = degToRad(degrees);
+        
+        // then
+        expect(radians).to.equal(Math.PI/2.0, 'expect radians to be');
+    });
+    
+    test('can convert 180 degrees to radians', () => {
+        // given
+        const degrees = 180;
+        
+        // when
+        const radians = degToRad(degrees);
+        
+        // then
+        expect(radians).to.equal(-Math.PI, 'expect radians to be');
+    });
+    
+    test('can convert 270 degrees to radians', () => {
+        // given
+        const degrees = 270;
+        
+        // when
+        const radians = degToRad(degrees);
+        
+        // then
+        expect(radians).to.equal(-Math.PI/2.0, 'expect radians to be');
+    });
+    
+    test('can convert 360 degrees to radians', () => {
+        // given
+        const degrees = 360;
+        
+        // when
+        const radians = degToRad(degrees);
+        
+        // then
+        expect(radians).to.equal(0.0, 'expect radians to be');
+    });
+    
+    test('can convert 450 degrees to radians', () => {
+        // given
+        const degrees = 450;
+        
+        // when
+        const radians = degToRad(degrees);
+        
+        // then
+        expect(radians).to.equal(Math.PI/2.0, 'expect radians to be');
+    });
+    
+    test('can convert -90 degrees to radians', () => {
+        // given
+        const degrees = -90;
+        
+        // when
+        const radians = degToRad(degrees);
+        
+        // then
+        expect(radians).to.equal(-Math.PI/2.0, 'expect radians to be');
+    });
+    
+    test('can convert -180 degrees to radians', () => {
+        // given
+        const degrees = -180;
+        
+        // when
+        const radians = degToRad(degrees);
+        
+        // then
+        expect(radians).to.equal(-Math.PI, 'expect radians to be');
+    });
+    
+    test('can convert -270 degrees to radians', () => {
+        // given
+        const degrees = -270;
+        
+        // when
+        const radians = degToRad(degrees);
+        
+        // then
+        expect(radians).to.equal(Math.PI/2.0, 'expect radians to be');
+    });
+    
+    test('can convert -360 degrees to radians', () => {
+        // given
+        const degrees = -360;
+        
+        // when
+        const radians = degToRad(degrees);
+        
+        // then
+        expect(radians).to.equal(0.0, 'expect radians to be');
+    });
+    
+    test('can convert -450 degrees to radians', () => {
+        // given
+        const degrees = -450;
+        
+        // when
+        const radians = degToRad(degrees);
+        
+        // then
+        expect(radians).to.equal(-Math.PI/2.0, 'expect radians to be');
     });
 });

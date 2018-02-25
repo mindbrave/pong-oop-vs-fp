@@ -1,6 +1,6 @@
 
 import {Paddle, orderPaddleToMoveUp, orderPaddleToMoveDown, orderPaddleToStop, movePaddle} from './paddle';
-import {Vec2} from './math';
+import {Ball, moveBall, orderBallToMoveInRandomNotVerticalDirection} from './ball';
 
 
 export type Pong = {
@@ -61,14 +61,9 @@ export const updatePong = (game: Pong, duration: number): Pong => ({
     paddles: {
         ...game.paddles,
         player: movePaddle(game.paddles.player, game.view, duration)
-    }
+    },
+    ball: moveBall(game.ball, game.view, duration)
 });
-
-
-type Ball = {
-    position: Vec2,
-    radius: number
-};
 
 
 const PADDLE_SIZE = {
@@ -76,6 +71,7 @@ const PADDLE_SIZE = {
     HEIGHT: 50
 };
 const BALL_RADIUS = 5.0;
+const BALL_SPEED = 120.0;
 const PADDLE_SPEED = 60.0;
 
 export const createPong = (width: number, height: number): Pong => ({
@@ -115,13 +111,18 @@ export const createPong = (width: number, height: number): Pong => ({
             }
         }
     },
-    ball: {
+    ball: orderBallToMoveInRandomNotVerticalDirection({
         position: {
             x: width/2,
             y: height/2,
         },
+        velocity: {
+            x: 0,
+            y: 0
+        },
         radius: BALL_RADIUS,
-    },
+        speed: BALL_SPEED
+    }, Math.random),
     view: {
         width,
         height

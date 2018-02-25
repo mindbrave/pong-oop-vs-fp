@@ -3,7 +3,7 @@ import {defineSupportCode, setWorldConstructor} from 'cucumber';
 import {expect} from 'chai';
 
 import {createPong, orderPlayerPaddleToMoveUp, orderPlayerPaddleToMoveDown, orderPlayerPaddleToStop} from '../../pong';
-import {withViewHeight, withPlayerPaddle, simulateGameForDuration} from '../gameFixture';
+import {withViewHeight, withPlayerPaddle, withBall, simulateGameForDuration} from '../gameFixture';
 import {
     isAtPosition,
     hasSpeed,
@@ -12,6 +12,7 @@ import {
     paddleIsJustOverBottomEdge,
     paddleIsJustBeneathTopEdge
 } from '../paddleFixture';
+import {ballIsNearTopEdge, ballIsNearBottomEdge, ballHasVelocity} from '../ballFixture';
 
 
 setWorldConstructor(function() {
@@ -62,6 +63,34 @@ defineSupportCode(function({Given, When, Then}) {
         );
     });
     
+    Given(/^ball is near top edge$/, function() {
+        this.game = withBall(
+            this.game,
+            ballIsNearTopEdge(this.game.ball, this.game.view.height)
+        );
+    });
+    
+    Given(/^ball is near bottom edge$/, function() {
+        this.game = withBall(
+            this.game,
+            ballIsNearBottomEdge(this.game.ball)
+        );
+    });
+    
+    Given(/^ball velocity is towards top edge$/, function() {
+        this.game = withBall(
+            this.game,
+            ballHasVelocity(this.game.ball, {...this.game.ball.velocity, y: this.game.ball.speed})
+        );
+    });
+    
+    Given(/^ball velocity is towards bottom edge$/, function() {
+        this.game = withBall(
+            this.game,
+            ballHasVelocity(this.game.ball, {...this.game.ball.velocity, y: -this.game.ball.speed})
+        );
+    });
+    
     When(/^player moves paddle up for (.*) second$/, function(duration: string) {
         this.game = orderPlayerPaddleToMoveUp(this.game);
         this.game = simulateGameForDuration(this.game, parseFloat(duration));
@@ -74,6 +103,10 @@ defineSupportCode(function({Given, When, Then}) {
     
     When(/^player stops moving paddle$/, function() {
         this.game = orderPlayerPaddleToStop(this.game);
+    });
+    
+    When(/^(.*) second of game passes$/, function(duration: string) {
+        this.game = simulateGameForDuration(this.game, parseFloat(duration));
     });
     
     Then(/^two paddles are located near edges of both sides \(left and right\) of game view, in the middle of view height$/, function() {
@@ -116,5 +149,22 @@ defineSupportCode(function({Given, When, Then}) {
             this.game.paddles.player.size.height/2.0,
             'expect player paddle position y to be'
         );
+    });
+    
+    Then(/^ball must not be in the start position$/, function() {
+        expect(this.game.ball.position.x).to.not.equal(this.game.view.width/2, 'expect ball x not in the middle of view');
+        expect(this.game.ball.position.y).to.not.equal(this.game.view.height/2, 'expect ball y not in the middle of view');
+    });
+    
+    Then(/^ball velocity must not be vertical$/, function() {
+        expect(this.game.ball.velocity.x).to.not.equal(0.0, 'expect ball velocity x to not be');
+    });
+    
+    Then(/^ball should have bounce off from top edge$/, function() {
+        expect(this.game.ball.velocity.y).to.be.below(0.0, 'expect ball velocity y to be below');
+    });
+    
+    Then(/^ball should have bounce off from bottom edge$/, function() {
+        expect(this.game.ball.velocity.y).to.be.above(0.0, 'expect ball velocity y to be above');
     });
 });

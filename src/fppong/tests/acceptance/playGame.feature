@@ -43,3 +43,26 @@ Feature: Player is able to play the basic version of classic game
       And player paddle is just over the bottom edge
     When player moves paddle down for 1 second
     Then player paddle is still at the bottom edge
+    
+  Scenario: Ball moves in the random direction on game start
+    Given player just started a game
+    When 1 second of game passes
+    Then ball must not be in the start position
+    
+  Scenario: Ball don't move vertically on game start
+    Given player just started a game
+    When 1 second of game passes
+    Then ball velocity must not be vertical
+    
+  Scenario: Ball bounces off from top edge
+    Given ball is near top edge
+    And ball velocity is towards top edge
+    When 1 second of game passes
+    Then ball should have bounce off from top edge
+    
+  Scenario: Ball bounces off from bottom edge
+    Given ball is near bottom edge
+    And ball velocity is towards bottom edge
+    When 1 second of game passes
+    Then ball should have bounce off from bottom edge
+    

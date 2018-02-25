@@ -13,7 +13,8 @@
         SystemJS.config({
             "paths": {
                 "rxjs": "./node_modules/rxjs/bundles/Rx.min.js",
-                "ramda": "./node_modules/ramda/dist/ramda.min.js"
+                "ramda": "./node_modules/ramda/dist/ramda.min.js",
+                "pipe-operator": "./node_modules/pipe-operator/src/index.js"
             }
         });
         SystemJS.import('fppong/main').then(function(pong) {

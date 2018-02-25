@@ -22,3 +22,14 @@ export const vectorLength = (v: Vec2): number => Math.sqrt(Math.pow(v.x, 2) + Ma
 
 
 export const normalizeVector = (v: Vec2): Vec2 => ({x: v.x/vectorLength(v), y: v.y/vectorLength(v)});
+
+
+export const radiansToUnitVector = (rad: number): Vec2 => ({x: Math.cos(rad), y: Math.sin(rad)});
+
+
+export const degToRad = (deg: number): number => {
+    let clampedDeg = deg % 360;
+    clampedDeg = clampedDeg < 0 ? clampedDeg + 360 : clampedDeg;
+    clampedDeg = clampedDeg < 180 ? clampedDeg : clampedDeg - 360;
+    return clampedDeg * Math.PI/180.0;
+};

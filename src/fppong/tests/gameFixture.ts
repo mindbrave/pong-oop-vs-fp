@@ -3,6 +3,7 @@ import {range} from 'ramda';
 
 import {Pong, updatePong} from '../pong';
 import {Paddle} from '../paddle';
+import {Ball} from '../ball';
 
 
 export const withViewHeight = (game: Pong, height: number): Pong => ({
@@ -20,6 +21,12 @@ export const withPlayerPaddle = (game: Pong, paddle: Paddle): Pong => ({
         ...game.paddles,
         player: paddle
     }
+});
+
+
+export const withBall = (game: Pong, ball: Ball): Pong => ({
+    ...game,
+    ball
 });
 
 
